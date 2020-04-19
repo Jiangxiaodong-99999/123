@@ -1,0 +1,129 @@
+data1=read.csv(file = "D:\magic04.txt")
+
+# 计算均值
+sum=matrix(0,1,10)
+for (i in 1:10) {                   #从第一列开始遍历
+    for (j in 1:length(data1[,1])) {#从第i列的第一个元素逐个遍历
+     sum[1,i]=(sum[1,i]+data1[j,i]) #将同一列的数值相加
+    }
+    }
+mean_vector=sum/length(data1[,1])
+
+#计算方差
+data1[,11]=NULL
+U=matrix(0,length(data1[,1]),10)
+for (i in 1:10) {
+  U[,i]=matrix(1,length(data1[,1]),1)*mean_vector[1,i]
+}
+A=data1-U
+sum1=matrix(0,1,10)
+for (i in 1:10) {
+  for (j in 1:length(data1[,1])) {
+    sum1[1,i]=sum1[1,i]+A[j,i]**2
+  }
+}
+var_vector=sum1/(length(data1[,1])-1)
+print(mean_vector)
+print(t(var_vector))
+
+
+# 内积计算协方差
+data1=read.csv(file = "D:\magic04.txt")
+M=matrix(0,length(data1[,1]),10)
+for (i in 1:10) {
+  M[,i]=as.matrix(data1[,i])
+  for (i in 1:10) {
+    U[,i]=mean(data1[,i])*matrix(1,length(data1[,1]),1)
+  }
+}
+Z=M-U
+corvar=(t(Z)%*%Z)*1/(length(data1[,1])-1)
+print(corvar)
+
+
+#外积计算协方差
+data1=read.csv(file = file.choose())
+data1[,11]=NULL
+data=as.matrix(data1)
+mean_vector=matrix(0,1,10)#均值向量
+covvar=matrix(0,10,10)
+U=matrix(0,length(data[,1]),10)
+for (i in 1:10) {
+  mean_vector[1,i]=mean(data[,i])
+}
+
+for (i in 1:length(data1[,1])) {
+  U[i,]=data[i,]-mean_vector  #数据居中化
+  covvar=covvar+U[i,]%*%t(U[i,])
+
+}
+print(covvar/(length(data1[,1])-1))  
+
+
+#计算12属性相关系数
+magic=read.csv(file = file.choose())
+z1=as.matrix(magic[,1])-mean(magic[,1])*matrix(1,length(magic[,1]),1)#将数据居中化
+z2=as.matrix(magic[,2])-mean(magic[,2])*matrix(1,length(magic[,2]),1)
+sum1=0
+sum2=0
+for (i in 1:length(magic[,1])) {
+  sum1=sum1+z1[i,1]**2#向量z1长度的平方
+  sum2=sum2+z2[i,1]**2
+}
+cos12=(t(z1)%*%z2)/(sqrt(sum1)*sqrt(sum2))
+print(cos12)
+dev.new()
+plot(z1,z2)
+
+
+#绘制属性1的正态分布函数
+magic=read.csv(file = file.choose())
+CU1=as.matrix(magic[,1])
+sum=0
+sum1=0
+for (i in CU1) {
+  sum=sum+i
+}
+mean_1=sum/length(magic[,1])#计算出数据均值
+for (i in CU1) {
+  sum1=sum1+(i-mean_1)**2
+}
+cov1=sum1/length(magic[,1])#计算出方差
+dev.new()
+curve(dnorm(x,mean_1,cov1),xlim =c(-50,150),col="blue",lwd=3 )
+
+
+
+
+
+
+data1=read.csv(file = file.choose())
+data1[,11]=NULL
+data=as.matrix(data1)
+#计算最大协方差
+mean_vector=matrix(0,1,10)
+covvar=matrix(0,10,10)
+U=matrix(0,length(data[,1]),10)
+for (i in 1:10) {
+  mean_vector[1,i]=mean(data[,i])
+}
+
+for (i in 1:length(data1[,1])) {
+  U[i,]=data[i,]-mean_vector
+  covvar=covvar+U[i,]%*%t(U[i,])
+  
+}
+M=covvar/(length(data1[,1])-1) 
+print(M)
+max1=M[1,2]
+print(max1)
+for (i in 1:10) {  #逐个遍历协方差矩阵中元素，将最大值存在max1中
+  for (j in 1:10) {
+    if(i!=j){
+      if(M[i,j]>max1){
+        max1=M[i,j]
+      }
+    }
+  }
+}
+print(max1)
