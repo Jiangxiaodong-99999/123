@@ -1,0 +1,38 @@
+iris$Species=NULL
+colnames(iris)=NULL
+data1=matrix(0,150,4)
+options(digits = 3)
+for (i in 1:4) {
+  data1[,i]=iris[,i]
+}
+data2=matrix(0,150,4)
+for (i in 1:4) {
+  data2[,i]=data1[,i]-matrix(1,150,1)*mean(data1[,i])#数据居中化
+}
+K=matrix(0,150,150)
+for (i in 1:150) {        #通过核函数计算，并赋值给核矩阵对应索引处。
+  for (j in i:150) {
+    K[i,j]=K[j,i]=(t(data2[i,])%*%data2[j,])**2
+  }
+}
+X=matrix(0,150,10)
+for (i in 1:150) {      #求出将数据嵌入高维坐标后的点的坐标
+  X[i,1]=data2[i,1]**2
+  X[i,2]=data2[i,2]**2
+  X[i,3]=data2[i,3]**2
+  X[i,4]=data2[i,4]**2
+  X[i,5]=data2[i,1]*data2[i,2]*sqrt(2)
+  X[i,6]=data2[i,1]*data2[i,3]*sqrt(2)
+  X[i,7]=data2[i,1]*data2[i,4]*sqrt(2)
+  X[i,8]=data2[i,2]*data2[i,3]*sqrt(2)
+  X[i,9]=data2[i,2]*data2[i,4]*sqrt(2)
+  X[i,10]=data2[i,3]*data2[i,4]*sqrt(2)
+}
+K1=matrix(0,150,150)  #计算特征空间任意两点的内积
+for (i in 1:150) {
+  for (j in i:150) {
+    K1[i,j]=K1[j,i]=t(X[i,])%*%X[j,]
+  }
+}
+
+print(K-K1)   #通过作差观察两种方法计算出的核矩阵是否相等
