@@ -35,4 +35,4 @@ for (i in 1:150) {
   }
 }
 
-print(K)
+print(K-K1)
