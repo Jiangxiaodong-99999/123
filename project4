@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import math
+import treePlotter
 #计算某一属性里面的能取得最大Gain的对应的分割点，以及其增益熵
 def evaluate_numeric_attribute(D,att,sigma):   #参数分别是数据集、属性、分区最小值
     featureList = [instance[att] for instance in D]
@@ -105,4 +106,4 @@ data[data[:,2]=='Iris-versicolor',2]='c2'
 data[data[:,2]=='Iris-virginica',2]='c2'
 data=data.tolist()
 myTree = createTree(data,5,0.95)
-print(myTree)
+treePlotter.createPlot(myTree)
