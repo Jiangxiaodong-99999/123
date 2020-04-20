@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 def k(x, y, h, degree):     #计算任意两点之间的高斯核
     kernel = np.exp(-(np.linalg.norm(x - y) / h) ** 2. / 2.) / ((2. * np.pi) ** (degree / 2))
     return kernel
-def climbTOP(x_t, X, h=0.1,W=None, e=0.0001):
+def climbTOP(x_t, X, h=0.1,W=None, e=0.0001):#不断“爬山”，直到到最顶峰
     reduce = 0
     prob = 0
     x_l1 = np.copy(x_t)
@@ -26,7 +26,7 @@ def climbTOP(x_t, X, h=0.1,W=None, e=0.0001):
         if reduce < e:   #两次密度之差小于阈值跳出循环
             break
     return [x_l1, prob, radius]
-def _onestep(x_l0, X, W=None, h=0.1):
+def _onestep(x_l0, X, W=None, h=0.1):  #每一次迭代的结果
     n = X.shape[0]
     d = X.shape[1]
     superweight = 0.
